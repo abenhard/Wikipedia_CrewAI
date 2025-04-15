@@ -1,104 +1,59 @@
-validate_wikipedia_task:
-  description: |
-    Conduct forensic Wikipedia analysis for {topic}:
-    
-    OUTPUT TEMPLATE:
-    ## Wikipedia Quality Report: {topic}
-    
-    ### Basic Metadata
-    - URL: {output.url}
-    - Length: {output.chars} characters
-    - Last edit: {output.date}
-    
-    ### Reliability Indicators
-    - Protection Level: {output.protection_level}
-    - Edit Risk: {output.edit_risk}
-    - Citations Needed: {output.citations_needed}
-    - Stub: {output.is_stub}
-    - Featured: {output.is_featured}
-    
-    ### Final Assessment
-    Reliability Score: {output.reliability_score}/5
-  expected_output: Complete forensic report using template above
-  agent: wikipedia_validator
-
 write_article_task:
-  description: >
-    Compose Wikipedia-based article about {topic} meeting:
-    
-    STRUCTURE REQUIREMENTS:
-    1. Engaging lede (1-2 paragraphs)
-    2. 3-5 thematic sections
-    3. Reliability context box
-    4. Source verification prompts
-    5. Use pt/br
-    
-    RELIABILITY PROTOCOLS:
-    - For score <3: Add "Caution" banner
-    - For edit wars: Note "Multiple perspectives exist"
-    - For stubs: Add "This overview needs expansion"
-    
-    WORD COUNT: Strictly 300-350 words
-    
-    FORMATTING:
-    - Use Wikipedia's citation style
-    - Mark disputed claims with † symbol
-    - Box important caveats
-  expected_output: >
-    Full article in strict Markdown format with:
-    - Header image suggestion
-    - Section headings
-    - Footnote references
-    - Reliability sidebar
-  agent: article_writer
-  context: [validate_wikipedia_task]
-edit_article_task:
-  description: >
-    Enhance the article draft from previous task.
-    Focus on: warning visibility, readability, structure.
-    
-    OUTPUT FORMAT:
-    - Markdown with revision tracking
-    - Preserved validator warnings
-    - Improved flow
-  expected_output: >
-    Enhanced article version with edit notes
-  agent: content_editor
-  context: [write_article_task]
+    description: >
+      COM BASE EXCLUSIVAMENTE nos dados já coletados da Wikipedia:
+      
+      ### REQUISITOS OBRIGATÓRIOS:
+      1. Estrutura em Markdown com:
+         - Título descritivo (nível 1)
+         - Seções lógicas (níveis 2-3)
+         - Metadados no cabeçalho
+      2. Elementos de confiabilidade:
+         - Caixa <aside> para contexto de fontes
+         - Ícones ⚠️ para alertas graves
+         - Símbolo † para informações questionáveis
+      3. Formatação consistente:
+         - Citações no estilo [Wikipedia, ano]
+         - Links para seções relevantes
+         - Listas para itens múltiplos
 
-quality_control_task:
-  description: >
-    Realize a verificação final do artigo com base no sistema de 3 Passagens:
+      ### RESTRIÇÕES:
+      - ABSOLUTAMENTE NENHUMA nova pesquisa
+      - Manter todas as ressalvas originais
+      - Mínimo de 300 palavras em pt-BR
+    expected_output: >
+      Arquivo article.md contendo:
+      1. Artigo completo formatado em Markdown
+      2. Todos os elementos de confiabilidade visíveis
+      3. Metadados completos no cabeçalho
+    agent: article_writer
 
-    PASSAGEM 1: VERIFICAÇÃO MECÂNICA
-    - [ ] Contagem de palavras ≥ 300
-    - [ ] Alertas do validador foram tratados
-    - [ ] Alertas visuais estão proporcionais à gravidade
-    - [ ] Esta em portugues brasileiro
+content_editor_task:
+    description: >
+      REVISÃO DO ARTIGO EM article.md:
 
-    PASSAGEM 2: QUALIDADE DO CONTEÚDO
-    - [ ] Nenhuma afirmação sem fonte
-    - [ ] Seções equilibradas (nenhuma < 50 palavras)
-    - [ ] Legibilidade ≥ 60 (Flesch Reading Ease)
+      ### FOCO DA REVISÃO:
+      1. Clareza:
+         - Frases curtas e objetivas
+         - Termos técnicos explicados
+         - Transições suaves entre seções
+      2. Elementos visuais:
+         - Hierarquia clara de títulos
+         - Destaques proporcionais à gravidade
+         - Espaçamento adequado
+      3. Consistência:
+         - Padronização de citações
+         - Mínimo de 300 palavras em pt-BR
+         - Formatação uniforme
+         - Estilo editorial coerente
 
-    PASSAGEM 3: INTEGRIDADE CONTEXTUAL
-    - [ ] Alinha-se ao perfil de risco do validador
-    - [ ] Sem conteúdo novo além da Wikipedia
-    - [ ] Timestamps em temas voláteis
+      ### AÇÕES PROIBIDAS:
+      - Alterar conteúdo factual
+      - Remover advertências
+      - Simplificar excessivamente
+    expected_output: >
+      Versão revisada de article.md com:
+      1. Texto significativamente mais claro
+      2. Elementos visuais melhorados
+      3. Problemas de fluxo resolvidos
+    agent: content_editor
 
-    DECISÃO:
-    - Se contagem de palavras < 300 → REENVIAR para `article_writer` com instrução de expandir.
-    - Se alertas graves ou problemas de estrutura → REVISÃO pelo `content_editor`.
-    - Caso contrário → APROVADO.
-
-    SAÍDA ESPERADA:
-    - "APPROVADO"
-    - ou "REENVIAR: writer – motivo"
-    - ou "REVISAR: editor – motivo"
-  expected_output: >
-    Uma linha com decisão final e motivo, ex:
-    "APPROVADO"
-    "REENVIAR: writer – artigo tem 278 palavras"
-    "REVISAR: editor – alerta de disputa não destacado"
-  agent: quality_controller
-  context: [edit_article_task]

@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 def run():
     inputs = {
-        'topic': 'Inteligência Artificial',
+        'topic': 'computadores',
         'current_year': str(datetime.now().year)
     }
 
