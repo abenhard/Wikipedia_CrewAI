@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d48cae4b-f5a8-43ca-9e20-61d225e01050" name="Changes" comment="">
+    <list default="true" id="d48cae4b-f5a8-43ca-9e20-61d225e01050" name="Changes" comment="Tool e Agent fixes:&#10;&#10;Redução para dois agentes devido a limitação de uso de tokens, ainda a problemas com tópicos ambiguos.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/article.md" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/article.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wikipedia_crewai/report.md" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/report.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/agents.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/agents.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/tasks.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/tasks.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/crew.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/crew.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools/wikipedia_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools/wikipedia_search.py" afterDir="false" />
     </list>
@@ -71,6 +70,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Wikipedia_CrewAI\wikipedia_crewai\src\wikipedia_crewai" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.wikipedia_search">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Wikipedia_CrewAI" />
@@ -195,8 +199,17 @@
       <workItem from="1744568522136" duration="4415000" />
       <workItem from="1744644644767" duration="9513000" />
       <workItem from="1744671354847" duration="2991000" />
-      <workItem from="1744731648992" duration="2116000" />
+      <workItem from="1744731648992" duration="5224000" />
     </task>
+    <task id="LOCAL-00001" summary="Tool e Agent fixes:&#10;&#10;Redução para dois agentes devido a limitação de uso de tokens, ainda a problemas com tópicos ambiguos.">
+      <option name="closed" value="true" />
+      <created>1744734243567</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1744734243567</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -204,6 +217,10 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName=".env" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Tool e Agent fixes:&#10;&#10;Redução para dois agentes devido a limitação de uso de tokens, ainda a problemas com tópicos ambiguos." />
+    <option name="LAST_COMMIT_MESSAGE" value="Tool e Agent fixes:&#10;&#10;Redução para dois agentes devido a limitação de uso de tokens, ainda a problemas com tópicos ambiguos." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Wikipedia_CrewAI$main.coverage" NAME="main Coverage Results" MODIFIED="1744481268075" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai" />

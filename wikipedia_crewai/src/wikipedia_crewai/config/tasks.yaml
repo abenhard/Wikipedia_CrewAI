@@ -55,5 +55,9 @@ content_editor_task:
       1. Texto significativamente mais claro
       2. Elementos visuais melhorados
       3. Problemas de fluxo resolvidos
+      4. Apenas o artigo em si sem blocos <think> ou logs the debug
+    output_filter: >
+      1- Remova todos <think> blocks
+
     agent: content_editor
 

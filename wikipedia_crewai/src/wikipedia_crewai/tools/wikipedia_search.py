@@ -8,9 +8,9 @@ def wikipedia_search(input_data: Dict[str, Any]) -> Dict[str, Any]:
     """
     Ferramenta que realiza a busca e extração de informações de um artigo da Wikipédia em português,
     com base em um tópico ou descrição fornecida no campo 'description'.
+    Se o tópico for ambíguo ou não encontrado, retorna uma lista de sugestões.
     """
     try:
-        # Permitir chamadas diretas com {"description": "..."}, ou aninhadas com {"input_data": {"description": "..."}}
         if "input_data" in input_data:
             input_data = input_data["input_data"]
 
@@ -28,7 +28,7 @@ def wikipedia_search(input_data: Dict[str, Any]) -> Dict[str, Any]:
             "explaintext": True,
             "utf8": 1,
             "redirects": 1,
-            "exintro": True  # Retorna apenas o primeiro parágrafo
+            "exintro": True
         }
 
         response = requests.get(base_url, params=params, timeout=10)
@@ -37,7 +37,27 @@ def wikipedia_search(input_data: Dict[str, Any]) -> Dict[str, Any]:
 
         pages = data.get("query", {}).get("pages", {})
         if not pages or "-1" in pages:
-            return {"erro": "Artigo não encontrado"}
+            # Tópico não encontrado — buscar sugestões
+            search_params = {
+                "action": "query",
+                "format": "json",
+                "list": "search",
+                "srsearch": topic,
+                "utf8": 1
+            }
+
+            search_response = requests.get(base_url, params=search_params, timeout=10)
+            search_data = search_response.json()
+            results = search_data.get("query", {}).get("search", [])
+
+            if results:
+                suggestions = [res["title"] for res in results[:5]]
+                return {
+                    "erro": f"Tópico '{topic}' é ambíguo ou não encontrado.",
+                    "sugestoes": suggestions
+                }
+            else:
+                return {"erro": "Artigo não encontrado e nenhuma sugestão foi encontrada."}
 
         page = next(iter(pages.values()))
         result = {
