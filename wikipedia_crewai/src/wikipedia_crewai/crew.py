@@ -36,7 +36,7 @@ class WikipediaCrewai():
             tasks=[self.write_article_task],
             llm=self.groq_llm,
             tools=[wikipedia_search],
-            verbose=True,
+            verbose=os.getenv("DEBUG"),
             allow_delegation=False
         )
 
@@ -45,7 +45,7 @@ class WikipediaCrewai():
         return Agent(
             config=self.agents_config['content_editor'],
             llm=self.groq_llm,
-            verbose=True,
+            verbose=os.environ.get("DEBUG"),
             allow_delegation=False,
             max_rpm=15
         )

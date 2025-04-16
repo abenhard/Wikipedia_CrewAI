@@ -45,7 +45,8 @@ content_editor_task:
          - Mínimo de 300 palavras em pt-BR
          - Formatação uniforme
          - Estilo editorial coerente
-
+      4. Limpeza:
+         -O output final deve conter apenas o artigo em si, sem verbose ou seus pensamentos
       ### AÇÕES PROIBIDAS:
       - Alterar conteúdo factual
       - Remover advertências

@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 def run():
     inputs = {
-        'topic': 'Placa de video',
+        'topic': 'Placas de video AMD',
         'current_year': str(datetime.now().year)
     }
 

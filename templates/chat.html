@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr" style="height: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrewAI Wikipedia Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>CrewAI Wikipedia Assistant</h1>
+            <p>Ask about any topic to generate comprehensive Wikipedia-style content</p>
+        </header>
+
+        <main class="chat-container">
+            <div class="messages" id="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.type }}">
+                        <div class="message-content">
+                            {% if message.type == "user" %}
+                                <div class="message-sender">You</div>
+                                <div class="message-text">{{ message.content }}</div>
+                            {% elif message.type == "ai" %}
+                                <div class="message-sender">CrewAI</div>
+                                <div class="message-text markdown-content" data-content="{{ message.content | e }}"></div>
+                            {% elif message.type == "error" %}
+                                <div class="message-sender">Error</div>
+                                <div class="message-text error">{{ message.content }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <form class="input-area" action="/ask" method="post">
+                <input type="hidden" name="session_id" value="{{ session_id }}">
+                <input
+                    type="text"
+                    name="question"
+                    placeholder="Ask about any topic (e.g., 'Carros')"
+                    autocomplete="off"
+                    autofocus
+                    required
+                >
+                <button type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        function scrollToBottom() {
+            const messages = document.getElementById('messages');
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function renderMarkdown(content) {
+            const contentStr = typeof content === 'string' ? content : JSON.stringify(content);
+            const dirty = marked.parse(contentStr);
+            return DOMPurify.sanitize(dirty);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            scrollToBottom();
+            document.querySelectorAll('.markdown-content').forEach(el => {
+                const content = el.getAttribute('data-content');
+                el.innerHTML = renderMarkdown(content);
+            });
+        });
+
+        document.querySelector('.input-area').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = this;
+            const input = form.querySelector('input[name="question"]');
+            const messagesDiv = document.getElementById('messages');
+            const sessionId = form.querySelector('input[name="session_id"]').value;
+            const question = input.value.trim();
+
+            if (!question) return;
+
+            messagesDiv.innerHTML += `
+                <div class="message user">
+                    <div class="message-content">
+                        <div class="message-sender">You</div>
+                        <div class="message-text">${question}</div>
+                    </div>
+                </div>
+            `;
+
+            const loadingId = 'loading-' + Date.now();
+            messagesDiv.innerHTML += `
+                <div class="message ai">
+                    <div class="message-content">
+                        <div class="message-sender">CrewAI</div>
+                        <div id="${loadingId}" class="message-text loading">Generating Wikipedia content about <strong>${question}</strong>...</div>
+                    </div>
+                </div>
+            `;
+
+            scrollToBottom();
+            input.value = '';
+
+            try {
+                const response = await fetch('/api/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        topic: question,
+                        current_year: new Date().getFullYear().toString()
+                    })
+                });
+
+                const data = await response.json();
+                const loadingElement = document.getElementById(loadingId);
+
+                if (data.status === 'success') {
+                    const responseContent = typeof data.response === 'string'
+                        ? data.response
+                        : (data.response.article || JSON.stringify(data.response));
+
+                    loadingElement.outerHTML = `
+                        <div class="message-content">
+                            <div class="message-sender">CrewAI</div>
+                            <div class="message-text markdown-content" data-content="${responseContent.replace(/"/g, '&quot;')}"></div>
+                        </div>
+                    `;
+
+                    const newElement = messagesDiv.lastElementChild.querySelector('.markdown-content');
+                    newElement.innerHTML = renderMarkdown(responseContent);
+                } else {
+                    loadingElement.outerHTML = `
+                        <div class="message-text error">
+                            Error: ${data.message || 'Unknown error occurred'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById(loadingId).outerHTML = `
+                    <div class="message-text error">
+                        Network error: ${error.message}
+                    </div>
+                `;
+            }
+
+            scrollToBottom();
+            input.focus();
+        });
+    </script>
+</body>
+</html>
