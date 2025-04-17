@@ -34,7 +34,7 @@ class TopicRequest(BaseModel):
 
 
 def run_crewai_workflow(inputs: dict):
-    return WikipediaCrewai().crew().kickoff(inputs=inputs)
+    return WikipediaCrewai().run(topic=inputs["topic"])
 
 
 @app.get("/", response_class=HTMLResponse)
