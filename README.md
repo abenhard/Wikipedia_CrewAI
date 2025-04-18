@@ -52,19 +52,36 @@ Os fluxos são organizados com a biblioteca CrewAI, permitindo controle refinado
    cd Wikipedia_CrewAI-FAST_API
    ```
 
-2. Instale os pacotes:
+2. Crie um ambiente virtual:
+   ```bash
+   python -m venv venv
+   ```
+
+3. Ative o ambiente virtual:
+
+   - **Linux/macOS:**
+     ```bash
+     source venv/bin/activate
+     ```
+
+   - **Windows:**
+     ```bash
+     .\venv\Scripts\activate
+     ```
+
+4. Instale as dependências:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Execute a API:
+5. Execute a API( substituindo 8001 pela porta que desejar):
    ```bash
-   uvicorn api:app --reload
+   python -m uvicorn api:app --reload --port 8001
    ```
 
-4. Acesse via navegador:
+6. Acesse via navegador( substituindo 8001 pela porta usando no passo 5):
    ```
-   http://localhost:8000
+   http://localhost:8001
    ```
 
 ## ✍️ Exemplo de uso
@@ -74,6 +91,10 @@ Digite um tópico como **"inteligência artificial"** ou **"Brasil"**, e o siste
 - Verificar ambiguidade
 - Gerar um artigo completo em Markdown
 - Exibir o resultado na interface com destaques visuais
+- Salvar o artigo em uma pasta 'artigos' na raiz do projeto no formato md.
+
+- Obs: o artigo criado é nomeado com  o tópico digitado + data da criação, se caso um arquivo de mesmo nome ja exista na pasta, ele é então adicionado v1, v2, assim sucessivamente . 
+- Exemplo: carros_20-02-2026 e  carros_20-02-2026_v1
 
 ## 📄 Licença
 
