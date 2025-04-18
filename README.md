@@ -49,7 +49,7 @@ O sistema usa a biblioteca CrewAI para organizar múltiplos agentes autônomos r
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/Wikipedia_CrewAI-FAST_API.git
+   git clone https://github.com/abenhard/Wikipedia_CrewAI.git
    cd Wikipedia_CrewAI-FAST_API
    ```
 
