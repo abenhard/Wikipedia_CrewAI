@@ -4,11 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d48cae4b-f5a8-43ca-9e20-61d225e01050" name="Changes" comment="FastAPI:&#10;Erro de string">
+    <list default="true" id="d48cae4b-f5a8-43ca-9e20-61d225e01050" name="Changes" comment="FastAPI funcionando, mas ainda a problemas com o tópico, llms se confunde e escreve um artigo sobre algo nada haver com o input">
+      <change afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/utils/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/utils/save_article.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/utils/topic_validator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/agents.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/agents.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/tasks.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/tasks.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/crew.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/crew.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools/wikipedia_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools/wikipedia_search.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +67,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
     &quot;Python.teste_Crew.executor&quot;: &quot;Run&quot;,
     &quot;Python.teste_wikipediaTool.executor&quot;: &quot;Run&quot;,
     &quot;Python.wikipedia_search.executor&quot;: &quot;Run&quot;,
@@ -83,7 +94,7 @@
       <recent name="E:\Wikipedia_CrewAI\wikipedia_crewai\src\wikipedia_crewai" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.wikipedia_search">
+  <component name="RunManager" selected="Python.test">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Wikipedia_CrewAI" />
       <option name="ENV_FILES" value="" />
@@ -99,6 +110,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Wikipedia_CrewAI" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -178,6 +212,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.wikipedia_search" />
         <item itemvalue="Python.teste_wikipediaTool" />
         <item itemvalue="Python.main" />
@@ -209,7 +244,11 @@
       <workItem from="1744671354847" duration="2991000" />
       <workItem from="1744731648992" duration="9822000" />
       <workItem from="1744842329152" duration="3322000" />
-      <workItem from="1744906991908" duration="1667000" />
+      <workItem from="1744906991908" duration="2072000" />
+      <workItem from="1744912274672" duration="2390000" />
+      <workItem from="1744914806173" duration="1164000" />
+      <workItem from="1744928180492" duration="3249000" />
+      <workItem from="1744978029803" duration="4106000" />
     </task>
     <task id="LOCAL-00001" summary="Tool e Agent fixes:&#10;&#10;Redução para dois agentes devido a limitação de uso de tokens, ainda a problemas com tópicos ambiguos.">
       <option name="closed" value="true" />
@@ -235,7 +274,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744845091003</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="FastAPI funcionando, mas ainda a problemas com o tópico, llms se confunde e escreve um artigo sobre algo nada haver com o input">
+      <option name="closed" value="true" />
+      <created>1744909083076</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1744909083076</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -248,12 +295,14 @@
     <MESSAGE value="Tool e Agent fixes:&#10;&#10;Redução para dois agentes devido a limitação de uso de tokens, ainda a problemas com tópicos ambiguos." />
     <MESSAGE value="Agent fixes:&#10;&#10;Remoção de debug e thinking do article.md" />
     <MESSAGE value="FastAPI:&#10;Erro de string" />
-    <option name="LAST_COMMIT_MESSAGE" value="FastAPI:&#10;Erro de string" />
+    <MESSAGE value="FastAPI funcionando, mas ainda a problemas com o tópico, llms se confunde e escreve um artigo sobre algo nada haver com o input" />
+    <option name="LAST_COMMIT_MESSAGE" value="FastAPI funcionando, mas ainda a problemas com o tópico, llms se confunde e escreve um artigo sobre algo nada haver com o input" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Wikipedia_CrewAI$main.coverage" NAME="main Coverage Results" MODIFIED="1744481268075" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai" />
     <SUITE FILE_PATH="coverage/Wikipedia_CrewAI$wikipedia_search.coverage" NAME="wikipedia_search Coverage Results" MODIFIED="1744482927931" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools" />
     <SUITE FILE_PATH="coverage/Wikipedia_CrewAI$teste_Crew.coverage" NAME="teste_Crew Coverage Results" MODIFIED="1744480473847" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/wikipedia_crewai/tests" />
     <SUITE FILE_PATH="coverage/Wikipedia_CrewAI$teste_wikipediaTool.coverage" NAME="teste_wikipediaTool Coverage Results" MODIFIED="1744482800170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/wikipedia_crewai/tests" />
+    <SUITE FILE_PATH="coverage/Wikipedia_CrewAI$test.coverage" NAME="test Coverage Results" MODIFIED="1744914081800" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

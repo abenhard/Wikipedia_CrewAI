@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CrewAI Wikipedia Assistant</title>
+    <title>Criador de Artigos</title>
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -13,8 +13,8 @@
 <body>
     <div class="app-container">
         <header class="app-header">
-            <h1>CrewAI Wikipedia Assistant</h1>
-            <p>Ask about any topic to generate comprehensive Wikipedia-style content</p>
+            <h1>Criador de Artigos</h1>
+            <p>Crie um artigo baseado em qualquer tópico</p>
         </header>
 
         <main class="chat-container">
@@ -42,7 +42,7 @@
                 <input
                     type="text"
                     name="question"
-                    placeholder="Ask about any topic (e.g., 'Carros')"
+                    placeholder="Digite o tópico do artigo que deseja criar, seja o mais especifico possível para obter o melhor resultado"
                     autocomplete="off"
                     autofocus
                     required
@@ -101,7 +101,7 @@
                 <div class="message ai">
                     <div class="message-content">
                         <div class="message-sender">CrewAI</div>
-                        <div id="${loadingId}" class="message-text loading">Generating Wikipedia content about <strong>${question}</strong>...</div>
+                        <div id="${loadingId}" class="message-text loading">Criando artigo sobre <strong>${question}</strong>...</div>
                     </div>
                 </div>
             `;
