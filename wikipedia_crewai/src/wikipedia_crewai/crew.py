@@ -12,13 +12,14 @@ class WikipediaCrewai():
     """WikipediaCrewai crew"""
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
-
+#Inicie os modelos dentro de init
     def __init__(self):
         self.groq_llm = ChatGroq(
             api_key=os.getenv("GROQ_API_KEY"),
             model=os.getenv("GROQ_MODEL_NAME"),
             temperature=0.6
         )
+#caso use OPEANI comente ou apague as 2 linhas abaixo
         os.environ["OPENAI_API_KEY"] = "no-key"
         os.environ["ANTHROPIC_API_KEY"] = "no-key"
 
@@ -27,7 +28,7 @@ class WikipediaCrewai():
         return Agent(
             config=self.agents_config['article_writer'],
             tasks=[self.write_article_task],
-            llm=self.groq_llm,
+            llm=self.groq_llm, # mude aqui o modelo que deseja usar que foi inicializado em init, no caso de OPENAI pode se deletar a linha pois CrewAI o usa por default
             tools=[wikipedia_search], 
             verbose=os.getenv("DEBUG"),
             allow_delegation=False
@@ -84,16 +85,16 @@ class WikipediaCrewai():
             "topic": topic,
             "context": context
         }
-
+        #Se validado ai sim inicia a crew com o kickoff
         result = self.crew().kickoff(inputs=inputs)
-
+        #Limpa o texto
         if isinstance(result, CrewOutput):
             cleaned = self.clean_output(result.raw)
         else:
             cleaned = self.clean_output(result)
-
+        #Salva aquivo em 'artigos' na raiz do projeto
         save_article_to_file(topic, cleaned)
-
+        #processa para exibição web
         return GeneratedArticle(
             topic=topic,
             content=cleaned,
