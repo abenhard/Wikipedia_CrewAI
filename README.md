@@ -50,31 +50,20 @@ O sistema usa a biblioteca CrewAI para organizar múltiplos agentes autônomos r
 O sistema utiliza um LLM (Large Language Model) fornecido por serviços como **Groq**, **OpenAI**, **Anthropic**, entre outros. A escolha do provedor e do modelo é feita via variável de ambiente no arquivo `.env` e configurações no aquivo crew.py.
 Por padrão CrewAI utiliza o OPENAI.
 
-## ⚙️ Configuração do `.env`
+## ⚙️ Configuração do `.env`e como definir o provedor e modelo
 
-Antes de executar o sistema, é necessário criar um arquivo `.env` com as seguintes variáveis:
+Antes de executar o sistema, é necessário configurar o arquivo `.env` na raiz do projeto, por exemplo usando um modelo GROQ:
 
-```env
-GROQ_API_KEY=sua-chave-groq-aqui
-GROQ_MODEL_NAME=groq/deepseek-r1-distill-llama-70b  # ou outro modelo suportado, groq informa o 
-DEBUG=true  # true para ativar logs detalhados da CrewAI, false para executar silenciosamente
-```
-### 🔧 Como definir o provedor e modelo
-
-No seu `.env`, defina a variável `GROQ_MODEL_NAME` da seguinte forma:
 GROQ_MODEL_NAME=groq/llama3-8b-8192
-
 - A parte **antes da barra** (`groq/`) indica o **provedor**.
 - A parte **depois da barra** (`llama3-8b-8192`) indica o **modelo**.
 
-Além disso, é necessário informar a chave da API correspondente e criar o DEBUG, por exemplo:
+Além disso, é necessário informar a chave da API correspondente, por exemplo:
 
-GROQ_API_KEY=sua-chave-aqui 
-
-DEBUG=True
-
+GROQ_API_KEY=sua-chave-groq-aqui
 
 A variável `DEBUG` controla se os agentes devem funcionar no modo **verbose**, útil para depuração.
+DEBUG=false
 
 ### 📌 Provedores suportados (exemplos)
 
@@ -87,7 +76,7 @@ A variável `DEBUG` controla se os agentes devem funcionar no modo **verbose**, 
 ---
 
 ## 🛠️ Alterando o LLM no código (`crew.py`)
-> 💡 Se desejar usar outro provedor (como OpenAI ou Anthropic), você pode adaptar o arquivo `crew.py`, que atualmente inicializa o `ChatGroq` da seguinte forma:
+> 💡 Se desejar usar um provedor que seja GROQ(como OpenAI ou Anthropic), você pode adaptar o arquivo `crew.py`, que atualmente inicializa o `ChatGroq` da seguinte forma:
 
 ```python
 self.groq_llm = ChatGroq(
@@ -101,8 +90,14 @@ os.environ["OPENAI_API_KEY"] = "no-key"
 os.environ["ANTHROPIC_API_KEY"] = "no-key"
 ```
 
-Para usar OpenAI ou Anthropic, altere a inicialização do LLM conforme a classe desejada (`ChatAnthropic`, por exemplo), e defina as variáveis apropriadas no `.env`.
-
+Para usar OpenAI ou Anthropic, altere a inicialização do LLM conforme a classe desejada , `ChatAnthropic`, por exemplo:
+´´´
+self.llm = ChatAnthropic(
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
+        model=os.getenv("ANTHROPIC_MODEL_NAME"),
+        temperature=0.6
+    )
+´´´
 
 ## ▶️ Como rodar o projeto
 
