@@ -181,10 +181,16 @@ Digite um tópico como **"inteligência artificial"** ou **"Brasil"**. O sistema
 
 ---
 
-## 🐞 Problemas Conhecidos
+## 🐞 Observações 
 
 - Fragmentos do *raciocínio interno* dos modelos podem aparecer no texto, mesmo com `DEBUG=false`  
-- A qualidade do artigo depende diretamente do modelo LLM utilizado  
+- A qualidade do artigo depende diretamente do modelo LLM utilizado
+- na pasta Wikipedia_CrewAI\wikipedia_crewai\src\wikipedia_crewai esta um arquivo main.py que pode ser utilizado para testar o crewai sem usar o frontend:
+  
+```bash
+   cd Wikipedia_CrewAI/wikipedia_crewai/src/wikipedia_crewai
+   crewai run
+ ```
 
 ---
 
