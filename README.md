@@ -92,7 +92,7 @@ O artigo final é exibido ao usuário e salvo na pasta `artigos/`.
 
 A escolha do provedor e do modelo LLM (Groq, OpenAI, Anthropic etc.) é feita via `.env` e `crew.py`.
 
-Exemplo `.env` para uso com Groq:
+Use o template .env incluido ou use este exemplo de `.env` para uso com Groq:
 ```env
 GROQ_MODEL_NAME=groq/llama3-8b-8192
 GROQ_API_KEY=sua-chave-aqui
