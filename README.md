@@ -64,7 +64,7 @@ O sistema usa a biblioteca CrewAI para organizar múltiplos agentes autônomos r
    - **Windows:**
      ```bash
      python -m venv venv
-     .venv\Scripts\activate 
+     .\venv\Scripts\Activate.ps1
      ```
 
 3. Instale as dependências:
