@@ -4,7 +4,7 @@ from crewai import Agent, Crew, Process, Task, CrewOutput
 from crewai.project import CrewBase, agent, crew, task
 from langchain_groq import ChatGroq
 from .models import GeneratedArticle
-from .tools.wikipedia_search import wikipedia_search, buscar_artigo_wikipedia  # Certifique-se de que a ferramenta está sendo importada corretamente
+from .tools.wikipedia_search import wikipedia_search, buscar_artigo_wikipedia  
 from .utils.save_article import save_article_to_file
 
 @CrewBase
@@ -28,7 +28,7 @@ class WikipediaCrewai():
             config=self.agents_config['article_writer'],
             tasks=[self.write_article_task],
             llm=self.groq_llm,
-            tools=[wikipedia_search],  # A ferramenta é passada corretamente aqui
+            tools=[wikipedia_search], 
             verbose=os.getenv("DEBUG"),
             allow_delegation=False
         )
