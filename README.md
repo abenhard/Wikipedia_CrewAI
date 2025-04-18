@@ -104,7 +104,7 @@ DEBUG=false
 ---
 
 ## 🛠️ Alterando o LLM no código (`crew.py`)
-> 💡 Se desejar usar um provedor que seja GROQ(como OpenAI ou Anthropic), você pode adaptar o arquivo `crew.py`, que atualmente inicializa o `ChatGroq` da seguinte forma dentro de init:
+> 💡 Se desejar usar um provedor que seja GROQ(como OpenAI ou Anthropic), você pode adaptar o arquivo `crew.py` localizado em Wikipedia_CrewAI\wikipedia_crewai\src\wikipedia_crewai, que atualmente inicializa o `ChatGroq` da seguinte forma dentro de seu init:
 
 ```python
 self.groq_llm = ChatGroq(
