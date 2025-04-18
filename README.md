@@ -8,7 +8,7 @@ Este projeto integra um sistema de geração de artigos baseado em [CrewAI](http
 - Sugestão de tópicos em caso de ambiguidade ou não encontrado
 - Geração de artigos com no mínimo **300 palavras**
 - Validação e edição automatizadas por agentes
-- Interface web estilo ChatGPT
+- Interface web estilo Whatsapp
 - Suporte a Markdown com destaques visuais de confiabilidade
 
 ## 📂 Estrutura do Projeto
@@ -37,13 +37,12 @@ Wikipedia_CrewAI-FAST_API/
 
 ## 🧠 Como funciona
 
-O sistema usa a biblioteca CrewAI para organizar múltiplos agentes autônomos responsáveis por:
+O usuário digita um tópico de sua escolha no site, o tópico é então validado pela util 'topic_validator' caso não seja encontrado um artigo válido na wikipedia é sugerido alternativas ao usuário, uma vez validada o sistema usa a biblioteca CrewAI para organizar 2 agentes autônomos responsáveis por:
 
-1. **Pesquisar** conteúdo da Wikipedia.
-2. **Validar** a confiabilidade e completude.
-3. **Escrever** um artigo estruturado.
-4. **Editar** com foco em clareza, coesão e estilo.
-5. **Publicar** o resultado na interface web.
+1. **article_writer** Escreve um artigo estruturado usando como base em um artigo da wikipedia adquirido utilizando via a tool 'wikipedia_search' que usa a API da wikipedia.
+2. **content_editor** Edita o artigo criado dando mais clareza, coesão e estilo.
+
+O artigo então apresentado ao usuário no site e salvo na pasta 'artigos' na raiz do projeto. 
 
 ## ▶️ Primeiros passos para rodar o projeto
 
@@ -175,6 +174,10 @@ Digite um tópico como **"inteligência artificial"** ou **"Brasil"**, e o siste
 
 > 📝 Os arquivos são salvos com o nome do tópico + data. Se já existir, será salvo com sufixos `_v1`, `_v2`, etc.
 > - Exemplo: `carros_20-02-2026.md` → `carros_20-02-2026_v1.md`
+
+## Problemas conhecidos
+Partes do 'pensamento' das LMM's podem acabar no artigo, memso com verbose = false
+A qualidade do artigo dependende do modelo de LLM utilizado
 
 ## 📄 Licença
 
