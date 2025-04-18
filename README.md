@@ -1,14 +1,15 @@
 # Criador de artigos usando CrewAI com FastAPI
 
-Este projeto integra um sistema de geração de artigos baseado em [CrewAI](https://github.com/joaomdmoura/crewai) com uma interface web em [FastAPI](https://fastapi.tiangolo.com/). O sistema utiliza conteúdo da Wikipedia como base e transforma as informações em artigos formatados em Markdown com revisão e estruturação por agentes autônomos.
+Este projeto integra um sistema de geração de artigos baseado em [CrewAI](https://github.com/joaomdmoura/crewai) com uma interface web desenvolvida com [FastAPI](https://fastapi.tiangolo.com/). O conteúdo gerado é baseado em dados da Wikipedia, e o artigo final é formatado em Markdown com revisão e estruturação feitas por agentes autônomos.
 
 ## 🚀 Funcionalidades
 
 - Busca inteligente de tópicos na Wikipedia
-- Geração de artigos com mínimo de 300 palavras
-- Validação e edição automatizada por agentes
-- Interface web com visual estilo de Chat
-- Suporte a Markdown com marcações visuais de confiabilidade
+- Sugestão de tópicos em caso de ambiguidade ou não encontrado
+- Geração de artigos com no mínimo **300 palavras**
+- Validação e edição automatizadas por agentes
+- Interface web estilo ChatGPT
+- Suporte a Markdown com destaques visuais de confiabilidade
 
 ## 📂 Estrutura do Projeto
 
@@ -18,6 +19,7 @@ Wikipedia_CrewAI-FAST_API/
 ├── requirements.txt             # Dependências do projeto
 ├── static/style.css             # Estilo da interface web
 ├── templates/chat.html          # Template HTML com suporte a Markdown
+├── .env                         # Variáveis de ambiente (.gitignore recomendado)
 ├── wikipedia_crewai/            # Código principal do sistema multiagente
 │   ├── article.md               # Artigo gerado de exemplo
 │   ├── report.md                # Relatório de qualidade
@@ -30,18 +32,44 @@ Wikipedia_CrewAI-FAST_API/
 ## ⚙️ Requisitos
 
 - Python 3.10+
-- Dependências listadas em `requirements.txt`
+- Variáveis definidas no `.env`
+- Dependências listadas no `requirements.txt`
 
 ## 🧠 Como funciona
 
-O sistema define múltiplos agentes para:
-1. **Pesquisar** o conteúdo da Wikipedia.
-2. **Validar** a confiabilidade do artigo.
-3. **Escrever** o artigo com base no conteúdo coletado.
-4. **Editar** o texto para coesão, clareza e estilo.
-5. **Publicar** o conteúdo final na interface web.
+O sistema usa a biblioteca CrewAI para organizar múltiplos agentes autônomos responsáveis por:
 
-Os fluxos são organizados com a biblioteca CrewAI, permitindo controle refinado da comunicação entre os agentes.
+1. **Pesquisar** conteúdo da Wikipedia.
+2. **Validar** a confiabilidade e completude.
+3. **Escrever** um artigo estruturado.
+4. **Editar** com foco em clareza, coesão e estilo.
+5. **Publicar** o resultado na interface web.
+
+## ⚙️ Configuração do `.env`
+
+Antes de executar o sistema, é necessário criar um arquivo `.env` com as seguintes variáveis:
+
+```env
+GROQ_API_KEY=sua-chave-groq-aqui
+GROQ_MODEL_NAME=llama3-8b-8192  # ou outro modelo suportado
+DEBUG=true  # true para ativar logs detalhados da CrewAI, false para executar silenciosamente
+```
+
+> 💡 Se desejar usar outro provedor (como OpenAI ou Anthropic), você pode adaptar o arquivo `crew.py`, que atualmente inicializa o `ChatGroq` da seguinte forma:
+
+```python
+self.groq_llm = ChatGroq(
+    api_key=os.getenv("GROQ_API_KEY"),
+    model=os.getenv("GROQ_MODEL_NAME"),
+    temperature=0.6
+)
+
+# Evita conflito com outros provedores
+os.environ["OPENAI_API_KEY"] = "no-key"
+os.environ["ANTHROPIC_API_KEY"] = "no-key"
+```
+
+Para usar OpenAI ou Anthropic, altere a inicialização do LLM conforme a classe desejada (`ChatOpenAI`, `ChatAnthropic`), e defina as variáveis apropriadas no `.env`.
 
 ## ▶️ Como rodar o projeto
 
@@ -51,37 +79,33 @@ Os fluxos são organizados com a biblioteca CrewAI, permitindo controle refinado
    cd Wikipedia_CrewAI-FAST_API
    ```
 
-2. Crie um ambiente virtual:
-   ```bash
-   python -m venv venv
-   ```
-
-3. Ative o ambiente virtual:
+2. Crie e ative um ambiente virtual:
 
    - **Linux/macOS:**
      ```bash
+     python -m venv venv
      source venv/bin/activate
      ```
 
    - **Windows:**
      ```bash
-     .\venv\Scripts\activate
+     python -m venv venv
+     .env\Scriptsctivate
      ```
 
-4. Instale as dependências:
+3. Instale as dependências:
    ```bash
    pip install -r requirements.txt
    ```
-5. Adicione sua API key e modelo no .env
-   ```
-   Na raiz no projeto modifique o arquivo .env 
-   ```
-6. Execute a API( substituindo 8001 pela porta que desejar):
+
+4. Crie o arquivo `.env` e configure suas variáveis de API (veja seção anterior)
+
+5. Execute a API (substitua a porta se desejar):
    ```bash
    python -m uvicorn api:app --reload --port 8001
    ```
 
-7. Acesse via navegador( substituindo 8001 pela porta usando no passo 5):
+6. Acesse no navegador:
    ```
    http://localhost:8001
    ```
@@ -89,14 +113,16 @@ Os fluxos são organizados com a biblioteca CrewAI, permitindo controle refinado
 ## ✍️ Exemplo de uso
 
 Digite um tópico como **"inteligência artificial"** ou **"Brasil"**, e o sistema irá:
-- Buscar o conteúdo relevante da Wikipedia
-- Verificar ambiguidade
-- Gerar um artigo completo em Markdown
-- Exibir o resultado na interface com destaques visuais
-- Salvar o artigo em uma pasta 'artigos' na raiz do projeto no formato md.
 
-- Obs: o artigo criado é nomeado com  o tópico digitado + data da criação, se caso um arquivo de mesmo nome ja exista na pasta, ele é então adicionado v1, v2, assim sucessivamente . 
-- Exemplo: carros_20-02-2026 e  carros_20-02-2026_v1
+- Buscar conteúdo relevante da Wikipedia
+- Verificar ambiguidade e sugerir variações se necessário
+- Gerar um artigo em Markdown com 300+ palavras
+- Aplicar destaques visuais de confiabilidade
+- Exibir o conteúdo na interface web
+- Salvar o artigo automaticamente na pasta `artigos/`
+
+> 📝 Os arquivos são salvos com o nome do tópico + data. Se já existir, será salvo com sufixos `_v1`, `_v2`, etc.
+> - Exemplo: `carros_20-02-2026.md` → `carros_20-02-2026_v1.md`
 
 ## 📄 Licença
 
@@ -104,4 +130,4 @@ Este projeto é licenciado sob os termos da [MIT License](LICENSE).
 
 ---
 
-Contribuições são bem-vindas! 🚀
+Contribuições são bem-vindas! Abra uma issue ou pull request. 🚀
