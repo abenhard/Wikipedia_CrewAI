@@ -185,13 +185,20 @@ Digite um tópico como **"inteligência artificial"** ou **"Brasil"**. O sistema
 
 - Fragmentos do *raciocínio interno* dos modelos podem aparecer no texto, mesmo com `DEBUG=false`  
 - A qualidade do artigo depende diretamente do modelo LLM utilizado
-- na pasta Wikipedia_CrewAI\wikipedia_crewai\src\wikipedia_crewai esta um arquivo main.py que pode ser utilizado para testar o crewai sem usar o frontend:
+- na pasta Wikipedia_CrewAI\wikipedia_crewai\src\wikipedia_crewai esta um arquivo main.py que pode ser utilizado para testar o crewai sem usar o frontend, porém NÃO há validação do tópico:
   
 ```bash
    cd Wikipedia_CrewAI/wikipedia_crewai/src/wikipedia_crewai
    crewai run
  ```
-
+- Você pode alterar o tópico testado alternando:
+```python
+   def run():
+    inputs = {
+        'topic': 'Placas de video', #Altere aqui o tópico a ser utilizado
+        'current_year': str(datetime.now().year)
+    }
+ ```
 ---
 
 ## 📄 Licença
