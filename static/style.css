@@ -1,78 +1,230 @@
+/* O CSS já está bem estruturado, mas algumas sugestões de melhoria */
+:root {
+  --primary-color: #0077cc;
+  --primary-hover: #005fa3;
+  --success-color: #008000;
+  --error-color: #cc0000;
+  --bg-color: #f4f4f4;
+  --card-bg: #ffffff;
+  --text-color: #333;
+  --border-color: #ddd;
+  --light-gray: #f0f0f0;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
 
+/* Corpos de texto e fonte padrão */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Inter', sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   height: 100%;
+  line-height: 1.6;
 }
+
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--card-bg);
+  box-shadow: var(--shadow);
 }
+
 .app-header {
-  background-color: #ffffff;
-  padding: 1rem 2rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--card-bg);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow);
+  text-align: center;
 }
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+.app-header p {
+  margin: 0.5rem 0 0;
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Contêiner de chat */
 .chat-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  overflow-y: auto;
+  padding: 0;
+  overflow: hidden;
 }
+
 .messages {
   flex-grow: 1;
   overflow-y: auto;
-  margin-bottom: 1rem;
+  padding: 1rem 2rem;
+  background-color: var(--light-gray);
 }
+
+/* Mensagens do chat */
 .message {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.3s ease-out;
 }
+
+.message-content {
+  max-width: 80%;
+  margin-left: auto;
+}
+
+.message.user .message-content {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.message.ai .message-content,
+.message.error .message-content {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.message-sender {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
 .message.user .message-sender {
-  font-weight: 600;
-  color: #0077cc;
+  color: var(--primary-color);
+  text-align: right;
 }
+
 .message.ai .message-sender {
-  font-weight: 600;
-  color: #008000;
+  color: var(--success-color);
 }
+
+.message.error .message-sender {
+  color: var(--error-color);
+}
+
 .message-text {
-  background-color: #ffffff;
+  background-color: var(--card-bg);
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  word-wrap: break-word;
+}
+
+.message.user .message-text {
+  background-color: var(--primary-color);
+  color: white;
+  border-bottom-right-radius: 0.3rem;
+}
+
+.message.ai .message-text {
+  border-bottom-left-radius: 0.3rem;
+}
+
+.message-text.error {
+  background-color: #ffebee;
+  color: var(--error-color);
+  border-left: 3px solid var(--error-color);
+}
+
+.message-text.loading {
+  color: #666;
+  font-style: italic;
+}
+
+/* Markdown */
+/* Adiciona algumas melhorias visuais para mensagens de sugestão */
+.markdown-content {
+  padding: 0;
+  white-space: pre-wrap; /* Garante que quebras de linha sejam respeitadas */
+}
+
+.markdown-content p {
+  margin: 0.5rem 0;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+  list-style-type: disc;
+}
+
+.markdown-content pre {
+  background-color: #f8f8f8;
   padding: 1rem;
   border-radius: 0.5rem;
-  margin-top: 0.25rem;
-  white-space: pre-wrap;
+  overflow-x: auto;
 }
-.message-text.error {
-  background-color: #ffe6e6;
-  color: #cc0000;
+
+.markdown-content code {
+  font-family: monospace;
+  background-color: #f8f8f8;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.3rem;
+  font-size: 0.9em;
 }
+
+/* Melhorando o visual das mensagens ambíguas */
+.message.ai .message-text {
+  background-color: #fff4e6; /* Cor de fundo suave para mensagens de sugestão */
+  color: #5a4e4e;
+  border-left: 3px solid #ffcc00; /* Indicador visual de mensagem ambígua */
+}
+
+
+/* Input */
 .input-area {
   display: flex;
   align-items: center;
-  border-top: 1px solid #ddd;
-  padding-top: 1rem;
+  padding: 1rem 2rem;
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--border-color);
 }
+
 .input-area input[type="text"] {
   flex: 1;
-  padding: 0.75rem;
+  padding: 0.8rem 1rem;
   border-radius: 0.5rem;
-  border: 1px solid #ccc;
-  margin-right: 0.5rem;
+  border: 1px solid var(--border-color);
+  margin-right: 0.8rem;
+  font-size: 1rem;
+  transition: border 0.3s;
 }
+
+.input-area input[type="text"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.2);
+}
+
 .input-area button {
-  background-color: #0077cc;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 0.75rem;
+  padding: 0.8rem;
   border-radius: 0.5rem;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
+
 .input-area button:hover {
-  background-color: #005fa3;
+  background-color: var(--primary-hover);
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

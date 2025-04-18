@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br" dir="ltr" style="height: 100%;">
 <head>
@@ -14,7 +13,7 @@
     <div class="app-container">
         <header class="app-header">
             <h1>Criador de Artigos</h1>
-            <p>Crie um artigo baseado em qualquer tópico</p>
+            <p>Crie um artigo baseado em um tópico específico usando a Wikipedia como fonte</p>
         </header>
 
         <main class="chat-container">
@@ -23,13 +22,13 @@
                     <div class="message {{ message.type }}">
                         <div class="message-content">
                             {% if message.type == "user" %}
-                                <div class="message-sender">You</div>
+                                <div class="message-sender">Você</div>
                                 <div class="message-text">{{ message.content }}</div>
                             {% elif message.type == "ai" %}
                                 <div class="message-sender">CrewAI</div>
                                 <div class="message-text markdown-content" data-content="{{ message.content | e }}"></div>
                             {% elif message.type == "error" %}
-                                <div class="message-sender">Error</div>
+                                <div class="message-sender">Erro</div>
                                 <div class="message-text error">{{ message.content }}</div>
                             {% endif %}
                         </div>
@@ -37,12 +36,13 @@
                 {% endfor %}
             </div>
 
-            <form class="input-area" action="/ask" method="post">
-                <input type="hidden" name="session_id" value="{{ session_id }}">
+            <form class="input-area" id="chat-form">
+                <input type="hidden" name="session_id" id="session_id" value="{{ session_id }}">
                 <input
                     type="text"
                     name="question"
-                    placeholder="Digite o tópico do artigo que deseja criar, seja o mais especifico possível para obter o melhor resultado"
+                    id="question-input"
+                    placeholder="Digite o tópico do artigo que deseja criar, seja o mais específico possível para obter o melhor resultado"
                     autocomplete="off"
                     autofocus
                     required
@@ -58,103 +58,134 @@
     </div>
 
     <script>
+        // Função para rolar até o final do chat
         function scrollToBottom() {
             const messages = document.getElementById('messages');
             messages.scrollTop = messages.scrollHeight;
         }
 
+        // Função para renderizar markdown de forma segura
         function renderMarkdown(content) {
             const contentStr = typeof content === 'string' ? content : JSON.stringify(content);
-            const dirty = marked.parse(contentStr);
-            return DOMPurify.sanitize(dirty);
+            const dirty = marked.parse(contentStr); // Convertendo Markdown para HTML
+            return DOMPurify.sanitize(dirty); // Sanitizando o HTML para segurança
         }
 
+        // Adiciona mensagem ao chat
+        function addMessage(type, sender, content, isMarkdown = false) {
+            const messagesDiv = document.getElementById('messages');
+            const messageId = 'msg-' + Date.now();
+
+            let contentHtml = isMarkdown
+                ? `<div class="message-text markdown-content" data-content="${DOMPurify.sanitize(content).replace(/"/g, '&quot;')}"></div>`
+                : `<div class="message-text">${DOMPurify.sanitize(content)}</div>`;
+
+            messagesDiv.innerHTML += `
+                <div class="message ${type}" id="${messageId}">
+                    <div class="message-content">
+                        <div class="message-sender">${sender}</div>
+                        ${contentHtml}
+                    </div>
+                </div>
+            `;
+
+            if (isMarkdown) {
+                const element = document.getElementById(messageId).querySelector('.markdown-content');
+                element.innerHTML = renderMarkdown(content);
+            }
+
+            scrollToBottom();
+            return messageId;
+        }
+
+        // Atualiza uma mensagem existente
+        function updateMessage(id, newContent, isMarkdown = false) {
+            const message = document.getElementById(id);
+            if (!message) return;
+
+            const contentDiv = message.querySelector('.message-text');
+            if (isMarkdown) {
+                contentDiv.innerHTML = renderMarkdown(newContent);
+                contentDiv.setAttribute('data-content', DOMPurify.sanitize(newContent).replace(/"/g, '&quot;'));
+            } else {
+                contentDiv.innerHTML = DOMPurify.sanitize(newContent);
+            }
+
+            scrollToBottom();
+        }
+
+        // Inicialização quando o DOM estiver carregado
         document.addEventListener('DOMContentLoaded', () => {
             scrollToBottom();
+
+            // Renderiza qualquer markdown existente
             document.querySelectorAll('.markdown-content').forEach(el => {
                 const content = el.getAttribute('data-content');
                 el.innerHTML = renderMarkdown(content);
             });
-        });
 
-        document.querySelector('.input-area').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const form = this;
-            const input = form.querySelector('input[name="question"]');
-            const messagesDiv = document.getElementById('messages');
-            const sessionId = form.querySelector('input[name="session_id"]').value;
-            const question = input.value.trim();
+            // Configura o evento de submit do formulário
+            document.getElementById('chat-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const form = this;
+                const input = document.getElementById('question-input');
+                const question = input.value.trim();
+                const sessionId = document.getElementById('session_id').value;
 
-            if (!question) return;
+                if (!question) return;
 
-            messagesDiv.innerHTML += `
-                <div class="message user">
-                    <div class="message-content">
-                        <div class="message-sender">You</div>
-                        <div class="message-text">${question}</div>
-                    </div>
-                </div>
-            `;
+                // Adiciona a pergunta do usuário
+                addMessage('user', 'Você', question);
 
-            const loadingId = 'loading-' + Date.now();
-            messagesDiv.innerHTML += `
-                <div class="message ai">
-                    <div class="message-content">
-                        <div class="message-sender">CrewAI</div>
-                        <div id="${loadingId}" class="message-text loading">Criando artigo sobre <strong>${question}</strong>...</div>
-                    </div>
-                </div>
-            `;
+                // Adiciona mensagem de carregamento
+                const loadingId = addMessage('ai', 'CrewAI', `Criando artigo sobre <strong>${question}</strong>...`, false);
 
-            scrollToBottom();
-            input.value = '';
+                input.value = '';
+                input.focus();
 
-            try {
-                const response = await fetch('/api/ask', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        topic: question,
-                        current_year: new Date().getFullYear().toString()
-                    })
-                });
+                try {
+                    const response = await fetch('/api/ask', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            topic: question,
+                            current_year: new Date().getFullYear().toString(),
+                            session_id: sessionId
+                        })
+                    });
 
-                const data = await response.json();
-                const loadingElement = document.getElementById(loadingId);
+                    const data = await response.json();
 
-                if (data.status === 'success') {
-                    const responseContent = typeof data.response === 'string'
-                        ? data.response
-                        : (data.response.article || JSON.stringify(data.response));
+                    if (data.status === 'success') {
+                        // Processa resposta de sucesso
+                        const articleContent = data.data?.article?.content || data.message;
+                        updateMessage(loadingId, articleContent, true);
+                    }
+                    else if (data.status === 'ambiguous') {
+                        // Processa tópico ambíguo
+                        const suggestions = data.suggestions?.map(suggestion => `- ${suggestion}`).join('<br>') || 'Nenhuma sugestão disponível';
 
-                    loadingElement.outerHTML = `
-                        <div class="message-content">
-                            <div class="message-sender">CrewAI</div>
-                            <div class="message-text markdown-content" data-content="${responseContent.replace(/"/g, '&quot;')}"></div>
-                        </div>
-                    `;
+                        // Criamos a mensagem com HTML
+                        const messageContent = `
+                            ${data.message || 'Tópico ambíguo ou não encontrado, seja mais específico.'}<br><br>
+                            <strong>Sugestões:</strong><br>
+                            ${suggestions}
+                        `;
 
-                    const newElement = messagesDiv.lastElementChild.querySelector('.markdown-content');
-                    newElement.innerHTML = renderMarkdown(responseContent);
-                } else {
-                    loadingElement.outerHTML = `
-                        <div class="message-text error">
-                            Error: ${data.message || 'Unknown error occurred'}
-                        </div>
-                    `;
+                        // Passando o conteúdo para a função de atualização de mensagem com HTML
+                        updateMessage(loadingId, messageContent, false); // "false" para renderizar como HTML
+                    }
+
+                    else {
+                        // Processa outros erros
+                        updateMessage(loadingId, `Erro: ${data.message || 'Ocorreu um erro desconhecido'}`, false);
+                    }
+                } catch (error) {
+                    updateMessage(loadingId, `Erro de rede: ${error.message}`, false);
                 }
-            } catch (error) {
-                document.getElementById(loadingId).outerHTML = `
-                    <div class="message-text error">
-                        Network error: ${error.message}
-                    </div>
-                `;
-            }
-
-            scrollToBottom();
-            input.focus();
+            });
         });
     </script>
 </body>

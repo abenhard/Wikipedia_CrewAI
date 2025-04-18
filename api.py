@@ -1,5 +1,6 @@
 import sys
 import os
+import uuid
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -7,8 +8,9 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from wikipedia_crewai.src.wikipedia_crewai.crew import WikipediaCrewai
 from wikipedia_crewai.src.wikipedia_crewai.utils.topic_validator import validar_topico
+from wikipedia_crewai.src.wikipedia_crewai.models import APIResponse, GeneratedArticle
 from datetime import datetime
-import uuid
+
 from typing import Optional
 
 # Ajuste do caminho para módulos locais
@@ -20,7 +22,7 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 
 app = FastAPI()
-
+crew = WikipediaCrewai()
 # Arquivos estáticos, tools e templates
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
@@ -63,13 +65,14 @@ async def process_question(request: Request, question: str = Form(...), session_
         valido, resultado = validar_topico(question)
         if not valido:
             sugestoes = "\n".join(f"- {s}" for s in resultado)
-            resposta = f"❌ O tópico é ambíguo ou não foi encontrado. Aqui estão algumas sugestões:\n{ sugestoes }"
+            resposta = f"❌ O tópico é ambíguo ou não foi encontrado, seja mais especifico. Aqui estão algumas sugestões:\n{sugestoes}"
         else:
             inputs = {
                 'topic': question,
                 'current_year': str(datetime.now().year)
             }
-            resposta = run_crewai_workflow(inputs)
+            article = run_crewai_workflow(inputs)
+            resposta = article.content
 
         sessions[session_id]["messages"].append({
             "type": "ai",
@@ -88,7 +91,7 @@ async def process_question(request: Request, question: str = Form(...), session_
         "messages": sessions[session_id]["messages"]
     })
 
-@app.post("/api/ask")
+@app.post("/api/ask", response_model=APIResponse)
 async def api_ask(request: TopicRequest):
     """API pública para chamadas AJAX"""
     session_id = str(uuid.uuid4())
@@ -97,28 +100,36 @@ async def api_ask(request: TopicRequest):
     try:
         valido, resultado = validar_topico(request.topic)
         if not valido:
-            return {
-                "status": "ambiguous",
-                "message": "O tópico é ambíguo ou não foi encontrado.",
-                "suggestions": resultado,
-                "session_id": session_id
-            }
+            return APIResponse(
+                status="ambiguous",
+                message="O tópico é ambíguo ou não foi encontrado, por favor seja mais específico.",
+                suggestions=resultado if isinstance(resultado, list) else [],
+                session_id=session_id
+            )
 
         inputs = {
             'topic': request.topic,
             'current_year': request.current_year or str(datetime.now().year)
         }
-        resposta = run_crewai_workflow(inputs)
+        article = run_crewai_workflow(inputs)
 
-        return {
-            "status": "success",
-            "session_id": session_id,
-            "response": resposta
-        }
+        return APIResponse(
+            status="success",
+            message="Artigo gerado com sucesso",
+            data={
+                "article": {
+                    "content": article.content,
+                    "topic": article.topic,
+                    "source_url": article.source_url,
+                    "word_count": article.word_count
+                }
+            },
+            session_id=session_id
+        )
 
     except Exception as e:
-        return {
-            "status": "error",
-            "message": f"Ocorreu um erro ao processar sua solicitação: {str(e)}"
-        }
-
+        return APIResponse(
+            status="error",
+            message=f"Ocorreu um erro ao processar sua solicitação: {str(e)}",
+            session_id=session_id
+        )
