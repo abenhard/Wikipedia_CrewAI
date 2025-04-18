@@ -143,7 +143,7 @@ E então ajuste nos agentes o campo llm, por exemplo no article_writer:
         return Agent(
             config=self.agents_config['article_writer'],
             tasks=[self.write_article_task],
-            llm=self.groq_llm, # mude aqui o modelo que deseja usar
+            llm=self.groq_llm, # mude aqui para o modelo que deseja usar
             tools=[wikipedia_search], 
             verbose=os.getenv("DEBUG"),
             allow_delegation=False
