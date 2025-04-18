@@ -1,21 +1,13 @@
-from crewai.tools import tool
 import requests
 from urllib.parse import quote
-from typing import Dict, Any
+from typing import Dict, Any, Union
 
-@tool("wikipedia_search")
-def wikipedia_search(input_data: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Ferramenta que realiza a busca e extração de informações de um artigo da Wikipédia em português,
-    com base em um tópico ou descrição fornecida no campo 'description'.
-    Se o tópico for ambíguo ou não encontrado, retorna uma lista de sugestões.
-    """
+# Para usar fora da CrewAI e validar tópico
+#Busca artigo na Wikipédia em português. Se não encontrado ou ambíguo, retorna sugestões.
+def buscar_artigo_wikipedia(topic: str) -> Dict[str, Union[str, list, int]]:
+
     try:
-        if "input_data" in input_data:
-            input_data = input_data["input_data"]
-
-        topic = input_data.get("description", "").strip()
-
+        topic = topic.strip()
         if not topic:
             return {"erro": "Nenhum tópico válido fornecido"}
 
@@ -37,7 +29,7 @@ def wikipedia_search(input_data: Dict[str, Any]) -> Dict[str, Any]:
 
         pages = data.get("query", {}).get("pages", {})
         if not pages or "-1" in pages:
-            # Tópico não encontrado — buscar sugestões
+            # Buscar sugestões
             search_params = {
                 "action": "query",
                 "format": "json",
@@ -79,3 +71,21 @@ def wikipedia_search(input_data: Dict[str, Any]) -> Dict[str, Any]:
         return {"erro": f"Erro de conexão: {str(e)}"}
     except Exception as e:
         return {"erro": f"Erro ao processar o artigo: {str(e)}"}
+
+
+# 🔧 Tool para CrewAI (usando a função acima)
+from crewai.tools import tool
+
+# Ferramenta de pesquisa da Wikipedia
+@tool("wikipedia_search")
+def wikipedia_search(input_data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Tool para agentes da CrewAI.
+    Espera receber input_data['description'] com o tópico a ser buscado.
+    """
+    if "input_data" in input_data:
+        input_data = input_data["input_data"]
+
+    topic = input_data.get("description", "").strip()
+    return buscar_artigo_wikipedia(topic)
+

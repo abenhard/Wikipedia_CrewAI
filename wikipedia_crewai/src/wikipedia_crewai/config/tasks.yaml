@@ -1,63 +1,68 @@
 write_article_task:
-    description: >
-      COM BASE EXCLUSIVAMENTE nos dados já coletados da Wikipedia:
-      
-      ### REQUISITOS OBRIGATÓRIOS:
-      1. Estrutura em Markdown com:
-         - Título descritivo (nível 1)
-         - Seções lógicas (níveis 2-3)
-         - Metadados no cabeçalho
-      2. Elementos de confiabilidade:
-         - Caixa <aside> para contexto de fontes
-         - Ícones ⚠️ para alertas graves
-         - Símbolo † para informações questionáveis
-      3. Formatação consistente:
-         - Citações no estilo [Wikipedia, ano]
-         - Links para seções relevantes
-         - Listas para itens múltiplos
+  description: >
+    COM BASE EXCLUSIVAMENTE nos dados já coletados da Wikipedia:
+    - Escreva um artigo com base no seguinte contexto extraído da Wikipedia: {context}
+    - O tema do artigo é: {topic}.
+    
+    ### REQUISITOS OBRIGATÓRIOS:
+    1. Estrutura em Markdown com:
+       - Título descritivo (nível 1)
+       - Seções lógicas (níveis 2-3)
+    2. Elementos de confiabilidade:
+       - Caixa <aside> para contexto de fontes
+       - Ícones ⚠️ para alertas graves
+       - Símbolo † para informações questionáveis
+    3. Formatação consistente:
+       - Citações no estilo [Wikipedia, ano]
+       - Links para seções relevantes
+       - Listas para itens múltiplos
 
-      ### RESTRIÇÕES:
-      - ABSOLUTAMENTE NENHUMA nova pesquisa
-      - Manter todas as ressalvas originais
-      - Mínimo de 300 palavras em pt-BR
-    expected_output: >
-      Arquivo article.md contendo:
-      1. Artigo completo formatado em Markdown
-      2. Todos os elementos de confiabilidade visíveis
-      3. Metadados completos no cabeçalho
-    agent: article_writer
+    ### RESTRIÇÕES:
+    - ABSOLUTAMENTE NENHUMA nova pesquisa
+    - Manter todas as ressalvas originais
+    - Mínimo de 300 palavras em pt-BR
+  expected_output: >
+    Arquivo article.md contendo:
+    1. Artigo completo formatado em Markdown
+    2. Todos os elementos de confiabilidade visíveis
+  agent: article_writer
+  input_keys:
+    - topic
+    - context
+  output_file: article.md
 
 content_editor_task:
-    description: >
-      REVISÃO DO ARTIGO EM article.md:
+  description: >
+    REVISÃO DO ARTIGO EM article.md:
 
-      ### FOCO DA REVISÃO:
-      1. Clareza:
-         - Frases curtas e objetivas
-         - Termos técnicos explicados
-         - Transições suaves entre seções
-      2. Elementos visuais:
-         - Hierarquia clara de títulos
-         - Destaques proporcionais à gravidade
-         - Espaçamento adequado
-      3. Consistência:
-         - Padronização de citações
-         - Mínimo de 300 palavras em pt-BR
-         - Formatação uniforme
-         - Estilo editorial coerente
-
-      ### AÇÕES PROIBIDAS:
-      - Alterar conteúdo factual
-      - Remover advertências
-      - Simplificar excessivamente
-    expected_output: >
-      Versão revisada de article.md com:
-      1. Texto significativamente mais claro
-      2. Elementos visuais melhorados
-      3. Problemas de fluxo resolvidos
-      4. Apenas o artigo em si sem blocos <think> ou logs the debug
-    output_filter: >
-      1- Remova todos <think> blocks
-
-    agent: content_editor
-
+    ### FOCO DA REVISÃO:
+    1. Clareza:
+       - Frases curtas e objetivas
+       - Termos técnicos explicados
+       - Transições suaves entre seções
+    2. Elementos visuais:
+       - Hierarquia clara de títulos
+       - Destaques proporcionais à gravidade
+       - Espaçamento adequado
+    3. Consistência:
+       - Padronização de citações
+       - Mínimo de 300 palavras em pt-BR
+       - Formatação uniforme
+       - Estilo editorial coerente
+    4. Limpeza:
+       - O output final deve conter apenas o artigo em si, sem verbose ou seus pensamentos
+    ### AÇÕES PROIBIDAS:
+    - Alterar conteúdo factual
+    - Remover advertências
+    - Manter blocos de pensamento ou conteúdo que não interessa ao usuário
+    - Simplificar excessivamente
+  expected_output: >
+    Versão revisada de article.md com:
+    1. Texto significativamente mais claro
+    2. Elementos visuais melhorados
+    3. Problemas de fluxo resolvidos
+    4. Apenas o artigo com conteúdo de interesse ao usuário
+  agent: content_editor
+  output_filter: >
+    1- Remova todos <think> blocks
+  output_file: article.md
