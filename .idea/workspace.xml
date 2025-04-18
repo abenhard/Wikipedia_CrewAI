@@ -4,21 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d48cae4b-f5a8-43ca-9e20-61d225e01050" name="Changes" comment="FastAPI funcionando, mas ainda a problemas com o tópico, llms se confunde e escreve um artigo sobre algo nada haver com o input">
-      <change afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/utils/save_article.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/utils/topic_validator.py" afterDir="false" />
+    <list default="true" id="d48cae4b-f5a8-43ca-9e20-61d225e01050" name="Changes" comment="Criado o README">
+      <change afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chat.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/pyproject.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/agents.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/agents.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/tasks.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/config/tasks.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/crew.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/crew.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools/wikipedia_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai/tools/wikipedia_search.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,11 +81,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Wikipedia_CrewAI\wikipedia_crewai\src\wikipedia_crewai" />
       <recent name="E:\Wikipedia_CrewAI" />
       <recent name="E:\Wikipedia_CrewAI\wikipedia_crewai" />
       <recent name="E:\Wikipedia_CrewAI\wikipedia_crewai\src\wikipedia_crewai\static" />
       <recent name="E:\Wikipedia_CrewAI\wikipedia_crewai\src\wikipedia_crewai\static\static" />
-      <recent name="E:\Wikipedia_CrewAI\wikipedia_crewai\src\wikipedia_crewai" />
     </key>
   </component>
   <component name="RunManager" selected="Python.test">
@@ -248,7 +242,10 @@
       <workItem from="1744912274672" duration="2390000" />
       <workItem from="1744914806173" duration="1164000" />
       <workItem from="1744928180492" duration="3249000" />
-      <workItem from="1744978029803" duration="4106000" />
+      <workItem from="1744978029803" duration="5043000" />
+      <workItem from="1744995522579" duration="3761000" />
+      <workItem from="1744999471799" duration="2137000" />
+      <workItem from="1745001656708" duration="1275000" />
     </task>
     <task id="LOCAL-00001" summary="Tool e Agent fixes:&#10;&#10;Redução para dois agentes devido a limitação de uso de tokens, ainda a problemas com tópicos ambiguos.">
       <option name="closed" value="true" />
@@ -282,7 +279,31 @@
       <option name="project" value="LOCAL" />
       <updated>1744909083076</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="FastAPI funcionando, mas ainda a problemas com o tópico ambiguos, criar novo agenter?">
+      <option name="closed" value="true" />
+      <created>1744982840401</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1744982840401</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Criado o README">
+      <option name="closed" value="true" />
+      <created>1744995819759</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1744995819759</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Criado o README">
+      <option name="closed" value="true" />
+      <created>1744996813491</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1744996813491</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -296,7 +317,9 @@
     <MESSAGE value="Agent fixes:&#10;&#10;Remoção de debug e thinking do article.md" />
     <MESSAGE value="FastAPI:&#10;Erro de string" />
     <MESSAGE value="FastAPI funcionando, mas ainda a problemas com o tópico, llms se confunde e escreve um artigo sobre algo nada haver com o input" />
-    <option name="LAST_COMMIT_MESSAGE" value="FastAPI funcionando, mas ainda a problemas com o tópico, llms se confunde e escreve um artigo sobre algo nada haver com o input" />
+    <MESSAGE value="FastAPI funcionando, mas ainda a problemas com o tópico ambiguos, criar novo agenter?" />
+    <MESSAGE value="Criado o README" />
+    <option name="LAST_COMMIT_MESSAGE" value="Criado o README" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Wikipedia_CrewAI$main.coverage" NAME="main Coverage Results" MODIFIED="1744481268075" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/wikipedia_crewai/src/wikipedia_crewai" />

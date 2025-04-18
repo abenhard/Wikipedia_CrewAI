@@ -1,8 +1,9 @@
+import os
+import re
 from crewai import Agent, Crew, Process, Task, CrewOutput
 from crewai.project import CrewBase, agent, crew, task
 from langchain_groq import ChatGroq
-import os
-import re
+from .models import GeneratedArticle
 from .tools.wikipedia_search import wikipedia_search, buscar_artigo_wikipedia  # Certifique-se de que a ferramenta está sendo importada corretamente
 from .utils.save_article import save_article_to_file
 
@@ -70,33 +71,33 @@ class WikipediaCrewai():
     def clean_output(self, text: str) -> str:
         return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
 
-    def run(self, topic: str) -> str:
-        # Buscar contexto da Wikipedia para o tópico fornecido, como parte do processo do Crew
-        wiki_result = buscar_artigo_wikipedia( topic)
+    def run(self, topic: str) -> GeneratedArticle:
+        # Buscar contexto da Wikipedia para o tópico fornecido
+        wiki_result = buscar_artigo_wikipedia(topic)
 
         if "erro" in wiki_result:
             raise ValueError(wiki_result["erro"])
 
-        # Obter o extrato (contexto) para passar ao agente
         context = wiki_result.get("extrato", "Conteúdo indisponível")
 
-        # Agora passamos o 'topic' e 'context' nos inputs
         inputs = {
             "topic": topic,
-            "context": context  # Passando o contexto junto com o tópico
+            "context": context
         }
 
-        # Executando o Crew com os inputs corrigidos
         result = self.crew().kickoff(inputs=inputs)
 
-        # Processando o resultado e limpando o conteúdo gerado
         if isinstance(result, CrewOutput):
             cleaned = self.clean_output(result.raw)
         else:
             cleaned = self.clean_output(result)
 
-        # Salvando o artigo gerado
         save_article_to_file(topic, cleaned)
-        return cleaned
 
-
+        return GeneratedArticle(
+            topic=topic,
+            content=cleaned,
+            word_count=len(cleaned.split()),
+            source_url=wiki_result.get("url", ""),
+            reliability_flags=wiki_result.get("aviso", [])
+        )
