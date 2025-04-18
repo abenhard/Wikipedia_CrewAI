@@ -31,7 +31,7 @@ Wikipedia_CrewAI-FAST_API/
 
 ## ⚙️ Requisitos
 
-- Python 3.10+
+- Python >=3.10 <3.13 
 - Variáveis definidas no `.env`
 - Dependências listadas no `requirements.txt`
 
