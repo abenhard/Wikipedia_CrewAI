@@ -71,7 +71,7 @@ O sistema usa a biblioteca CrewAI para organizar múltiplos agentes autônomos r
    ```bash
    pip install -r requirements.txt
    ```
-4. Configure .env e crew.py
+4. Configure .env e crew.py na próxima seção. 
 
 ## 🧠 Configuração do Modelo de Linguagem (LLM)
 
