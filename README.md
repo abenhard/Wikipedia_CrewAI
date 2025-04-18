@@ -76,7 +76,7 @@ O artigo final é exibido ao usuário e salvo na pasta `artigos/`.
    - **Windows:**
      ```powershell
      python -m venv venv
-     .env\Scripts\Activate.ps1
+     .\venv\Scripts\Activate.ps1
      ```
 
 3. Instale as dependências:
