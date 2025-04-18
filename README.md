@@ -119,7 +119,7 @@ self.groq_llm = ChatGroq(
 )
 ```
 
-Para usar OpenAI ou Anthropic, altere para:
+Para usar Anthropic por exemplo, crie:
 
 ```python
 self.antho_llm = ChatAnthropic(
@@ -128,11 +128,26 @@ self.antho_llm = ChatAnthropic(
     temperature=0.6
 )
 ```
+Caso for usar OPENAI comentar ou excluir as linhas abaixo, que são usadas para evitar conflitos com outras LLM's posi CrewAI usa OpenAI por default:
+```python
+ os.environ["OPENAI_API_KEY"] = "no-key"
+ os.environ["ANTHROPIC_API_KEY"] = "no-key"
+)
+```
 
-E ajuste nos agentes:
+E então ajuste nos agentes o campo llm, por exemplo no article_writer:
 
 ```python
-llm=self.antho_llm  # Ou self.groq_llm, conforme desejado
+ @agent
+    def article_writer(self) -> Agent:
+        return Agent(
+            config=self.agents_config['article_writer'],
+            tasks=[self.write_article_task],
+            llm=self.groq_llm, # mude aqui o modelo que deseja usar
+            tools=[wikipedia_search], 
+            verbose=os.getenv("DEBUG"),
+            allow_delegation=False
+        )
 ```
 
 ---
