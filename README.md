@@ -45,16 +45,48 @@ O sistema usa a biblioteca CrewAI para organizar múltiplos agentes autônomos r
 4. **Editar** com foco em clareza, coesão e estilo.
 5. **Publicar** o resultado na interface web.
 
+## 🧠 Configuração do Modelo de Linguagem (LLM)
+
+O sistema utiliza um LLM (Large Language Model) fornecido por serviços como **Groq**, **OpenAI**, **Anthropic**, entre outros. A escolha do provedor e do modelo é feita via variável de ambiente no arquivo `.env` e configurações no aquivo crew.py.
+Por padrão CrewAI utiliza o OPENAI.
+
 ## ⚙️ Configuração do `.env`
 
 Antes de executar o sistema, é necessário criar um arquivo `.env` com as seguintes variáveis:
 
 ```env
 GROQ_API_KEY=sua-chave-groq-aqui
-GROQ_MODEL_NAME=llama3-8b-8192  # ou outro modelo suportado
+GROQ_MODEL_NAME=groq/deepseek-r1-distill-llama-70b  # ou outro modelo suportado, groq informa o 
 DEBUG=true  # true para ativar logs detalhados da CrewAI, false para executar silenciosamente
 ```
+### 🔧 Como definir o provedor e modelo
 
+No seu `.env`, defina a variável `GROQ_MODEL_NAME` da seguinte forma:
+GROQ_MODEL_NAME=groq/llama3-8b-8192
+
+- A parte **antes da barra** (`groq/`) indica o **provedor**.
+- A parte **depois da barra** (`llama3-8b-8192`) indica o **modelo**.
+
+Além disso, é necessário informar a chave da API correspondente e criar o DEBUG, por exemplo:
+
+GROQ_API_KEY=sua-chave-aqui 
+
+DEBUG=True
+
+
+A variável `DEBUG` controla se os agentes devem funcionar no modo **verbose**, útil para depuração.
+
+### 📌 Provedores suportados (exemplos)
+
+| Provedor   | Exemplo de modelo                      | Observação                               |
+|------------|----------------------------------------|------------------------------------------|
+| `groq`     | `groq/llama3-8b-8192`                  | Modelos hospedados pela Groq             |
+| `openai`   | `openai/gpt-4`                         | Requer `OPENAI_API_KEY`                  |
+| `anthropic`| `anthropic/claude-3-opus-20240229`     | Requer `ANTHROPIC_API_KEY`               |
+
+---
+
+## 🛠️ Alterando o LLM no código (`crew.py`)
 > 💡 Se desejar usar outro provedor (como OpenAI ou Anthropic), você pode adaptar o arquivo `crew.py`, que atualmente inicializa o `ChatGroq` da seguinte forma:
 
 ```python
@@ -64,12 +96,13 @@ self.groq_llm = ChatGroq(
     temperature=0.6
 )
 
-# Evita conflito com outros provedores
+# Evita conflito com outros provedores, CASO FOR USAR OPENAI COMENTE A SEGUINTES LINHAS
 os.environ["OPENAI_API_KEY"] = "no-key"
 os.environ["ANTHROPIC_API_KEY"] = "no-key"
 ```
 
-Para usar OpenAI ou Anthropic, altere a inicialização do LLM conforme a classe desejada (`ChatOpenAI`, `ChatAnthropic`), e defina as variáveis apropriadas no `.env`.
+Para usar OpenAI ou Anthropic, altere a inicialização do LLM conforme a classe desejada (`ChatAnthropic`, por exemplo), e defina as variáveis apropriadas no `.env`.
+
 
 ## ▶️ Como rodar o projeto
 
