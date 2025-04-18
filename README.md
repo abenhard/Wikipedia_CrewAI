@@ -1,14 +1,13 @@
-# Wikipedia CrewAI com FastAPI
+# Criador de artigos usando CrewAI com FastAPI
 
 Este projeto integra um sistema de geração de artigos baseado em [CrewAI](https://github.com/joaomdmoura/crewai) com uma interface web em [FastAPI](https://fastapi.tiangolo.com/). O sistema utiliza conteúdo da Wikipedia como base e transforma as informações em artigos formatados em Markdown com revisão e estruturação por agentes autônomos.
 
 ## 🚀 Funcionalidades
 
 - Busca inteligente de tópicos na Wikipedia
-- Resolução de ambiguidade e sugestões quando o tópico não é encontrado
 - Geração de artigos com mínimo de 300 palavras
 - Validação e edição automatizada por agentes
-- Interface web com visual estilo ChatGPT
+- Interface web com visual estilo de Chat
 - Suporte a Markdown com marcações visuais de confiabilidade
 
 ## 📂 Estrutura do Projeto
@@ -73,13 +72,16 @@ Os fluxos são organizados com a biblioteca CrewAI, permitindo controle refinado
    ```bash
    pip install -r requirements.txt
    ```
-
-5. Execute a API( substituindo 8001 pela porta que desejar):
+5. Adicione sua API key e modelo no .env
+   ```
+   Na raiz no projeto modifique o arquivo .env 
+   ```
+6. Execute a API( substituindo 8001 pela porta que desejar):
    ```bash
    python -m uvicorn api:app --reload --port 8001
    ```
 
-6. Acesse via navegador( substituindo 8001 pela porta usando no passo 5):
+7. Acesse via navegador( substituindo 8001 pela porta usando no passo 5):
    ```
    http://localhost:8001
    ```
