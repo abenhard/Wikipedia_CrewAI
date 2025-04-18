@@ -45,6 +45,34 @@ O sistema usa a biblioteca CrewAI para organizar múltiplos agentes autônomos r
 4. **Editar** com foco em clareza, coesão e estilo.
 5. **Publicar** o resultado na interface web.
 
+## ▶️ Primeiros passos para rodar o projeto
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/Wikipedia_CrewAI-FAST_API.git
+   cd Wikipedia_CrewAI-FAST_API
+   ```
+
+2. Crie e ative um ambiente virtual:
+
+   - **Linux/macOS:**
+     ```bash
+     python -m venv venv
+     source venv/bin/activate
+     ```
+
+   - **Windows:**
+     ```bash
+     python -m venv venv
+     .env\Scriptsctivate
+     ```
+
+3. Instale as dependências:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Configure .env e crew.py
+
 ## 🧠 Configuração do Modelo de Linguagem (LLM)
 
 O sistema utiliza um LLM (Large Language Model) fornecido por serviços como **Groq**, **OpenAI**, **Anthropic**, entre outros. A escolha do provedor e do modelo é feita via variável de ambiente no arquivo `.env` e configurações no aquivo crew.py.
@@ -76,7 +104,7 @@ DEBUG=false
 ---
 
 ## 🛠️ Alterando o LLM no código (`crew.py`)
-> 💡 Se desejar usar um provedor que seja GROQ(como OpenAI ou Anthropic), você pode adaptar o arquivo `crew.py`, que atualmente inicializa o `ChatGroq` da seguinte forma:
+> 💡 Se desejar usar um provedor que seja GROQ(como OpenAI ou Anthropic), você pode adaptar o arquivo `crew.py`, que atualmente inicializa o `ChatGroq` da seguinte forma dentro de init:
 
 ```python
 self.groq_llm = ChatGroq(
@@ -91,49 +119,45 @@ os.environ["ANTHROPIC_API_KEY"] = "no-key"
 ```
 
 Para usar OpenAI ou Anthropic, altere a inicialização do LLM conforme a classe desejada , `ChatAnthropic`, por exemplo:
-´´´
-self.llm = ChatAnthropic(
+```python
+self.antho_llm = ChatAnthropic(
         api_key=os.getenv("ANTHROPIC_API_KEY"),
         model=os.getenv("ANTHROPIC_MODEL_NAME"),
         temperature=0.6
     )
-´´´
+```
+Na parte dos agentes, modifique a variavel 'llm' em ambos:
+```python
+@agent
+    def article_writer(self) -> Agent:
+        return Agent(
+            config=self.agents_config['article_writer'],
+            tasks=[self.write_article_task],
+            llm=self.groq_llm, #AQUI MUDE PARA self.antho_llm se deseja usar o modelo ANTHROPIC ou deixa assim se deseja que um agente use GROQ e outro o Anthopic, por exemplo.
+            tools=[wikipedia_search], 
+            verbose=os.getenv("DEBUG"),
+            allow_delegation=False
+        )
 
-## ▶️ Como rodar o projeto
+    @agent
+    def content_editor(self) -> Agent:
+        return Agent(
+            config=self.agents_config['content_editor'],
+            llm=self.antho_llm , # AQUI FOI MODIFICADO POR EXEMPLO
+            verbose=os.getenv("DEBUG"),
+            allow_delegation=False,
+            max_rpm=15
+        )
+```
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/Wikipedia_CrewAI-FAST_API.git
-   cd Wikipedia_CrewAI-FAST_API
-   ```
+## ▶️ Passos finais para rodar o projeto
 
-2. Crie e ative um ambiente virtual:
-
-   - **Linux/macOS:**
-     ```bash
-     python -m venv venv
-     source venv/bin/activate
-     ```
-
-   - **Windows:**
-     ```bash
-     python -m venv venv
-     .env\Scriptsctivate
-     ```
-
-3. Instale as dependências:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Crie o arquivo `.env` e configure suas variáveis de API (veja seção anterior)
-
-5. Execute a API (substitua a porta se desejar):
+5. Execute a API (substitua a porta se desejar) no terminal, Observação tenha certeza de estar na raiz do projeto 'Wikipedia_CrewAI-FAST_API/':
    ```bash
    python -m uvicorn api:app --reload --port 8001
    ```
 
-6. Acesse no navegador:
+6. Acesse no navegador ou pelo ip no terminal:
    ```
    http://localhost:8001
    ```
